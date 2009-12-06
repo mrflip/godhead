@@ -6,81 +6,49 @@ class GodProcess
     :start_notify       => nil,
     :restart_notify     => nil,
     :flapping_notify    => nil,
-
     :process_log_dir    => '/var/log/god',
-
     :start_grace_time   => 20.seconds,
-    :restart_grace_time => nil,         # start_grace_time+2 if nil
+    :restart_grace_time => nil,         # will be start_grace_time+2 if left nil
     :default_interval   => 5.minutes,
     :start_interval     => 5.minutes,
     :mem_usage_interval => 20.minutes,
     :cpu_usage_interval => 20.minutes,
   }
-  # Site options definition files. Merged in order, later entries win.
-  GLOBAL_SITE_OPTIONS_FILES = []
-  # merged contents of the GLOBAL_SITE_OPTIONS_FILES
-  cattr_reader  :global_site_options
-  attr_accessor :options
+  #
+  # Hash mapping handle to default options
+  #
+  cattr_accessor :global_options
+  #
+  # options for this instance
+  #
+  attr_accessor  :options
+
+  # ===========================================================================
+  #
+  # Setup
+  #
 
   #
-  # * Class options are defined by the edamame code. They define each process'
-  #   base behavior.
+  # string holding name for this process type, eg 'mongrel' or 'starling'
   #
-  # * Site options are defined by config file(s), and define machine/org
-  #   specific policy (paths to daemon executables, for instance). Site options
-  #   override class options.
+  def handle
+    (options[:handle] || handle_from_class_name).to_s
+  end
+
+  def handle_from_class_name
+    self.class.to_s.underscore.gsub(/_recipe/, "")
+  end
+
   #
-  # * Options passed in at instantiation describe the specifics of this
-  #   particular process -- the path to a database's file, perhaps. They
-  #   override site options (and therefore class options too).
-  #
-  # Note that, though the options hash is preserved, if action
+  # pass in options to override the class default_options
   #
   def initialize _options
-    self.options = { }
-    self.options.deep_merge! self.class.default_options
-    self.options.deep_merge! self.class.site_options
-    self.options.deep_merge! _options
-    p self.options
+    self.options = self.class.default_options.deep_merge _options
   end
 
-  #
-  # Walks upwards through the inheritance tree, accumulating default
-  # options. Later (subclass) nodes should override earlier (super) nodes, with
-  # something like
-  #
-  #     def self.default_options
-  #       super.deep_merge(ThisClass::DEFAULT_OPTIONS)
-  #     end
-  #
-  def self.default_options
-    GodProcess::DEFAULT_OPTIONS
-  end
-
-  #
-  # Walks upwards through the inheritance tree, accumulating site
-  # options. Later (subclass) nodes should override earlier (super) nodes, with
-  # something like
-  #
-  #     def self.site_options
-  #       super.deep_merge( global_site_options[:this_class] )
-  #     end
-  #
-  def self.site_options
-    global_site_options[:god_process] || {}
-  end
-
-  def self.global_site_options
-    return @global_site_options if @globalsite_options
-    @global_site_options = {}
-    GLOBAL_SITE_OPTIONS_FILES.each do |options_filename|
-      @global_site_options.deep_merge! YAML.load_file(options_filename)
-    end
-    @global_site_options
-  end
-
-  def setup
-    LOG.info options.inspect
+  def self.create options={}
+    watcher = self.new options
+    watcher.mkdirs!
     God.watch do |watcher|
       setup_watcher   watcher
       setup_start     watcher
@@ -88,44 +56,39 @@ class GodProcess
       setup_lifecycle watcher
     end
   end
-  def self.create options={}
-    proc = self.new options
-    proc.setup
-    proc.mkdirs!
-    proc
+
+  #
+  # Starts with the portion of the global_options dealing with this class then
+  # walks upwards through the inheritance tree, accumulating default options.
+  #
+  # Subclasses should override with something like
+  #
+  #     def self.default_options
+  #       super.deep_merge(ThisClass::DEFAULT_OPTIONS)
+  #     end
+  #
+  def self.default_options
+    GodProcess::DEFAULT_OPTIONS.deep_merge(global_options[handle] || {})
   end
 
-  def handle
-    (options[:handle] || "#{self.class.kind}_#{options[:port]}").to_s
+  #
+  # load a series of YAML-format options files
+  #
+  # Later files win out over earlier files
+  #
+  def self.options_from_files *options_filenames
+    options = {}
+    options_filenames.each do |options_filename|
+      options.deep_merge! YAML.load_file(options_filename)
+    end
+    options
   end
 
-  # Log file
-  def process_log_file
-    File.join(options[:process_log_dir], handle+".log")
-  end
 
-  # create any directories required by the process
-  def mkdirs!
-    require 'fileutils'
-    FileUtils.mkdir_p File.dirname(process_log_file)
-  end
-
-  # command to start the daemon
-  def start_command
-    options[:start_command]
-  end
-  # command to stop the daemon
-  # return nil to have god daemonize the process
-  def stop_command
-    options[:stop_command]
-  end
-  # command to restart
-  # if stop_command is nil, it lets god daemonize the process
-  # otherwise, by default it runs stop_command, pauses for 1 second, then runs start_command
-  def restart_command
-    return unless stop_command
-    [stop_command, "sleep 1", start_command].join(" && ")
-  end
+  # ===========================================================================
+  #
+  # Watcher setup
+  #
 
   #
   # Setup common to most watchers
@@ -191,15 +154,38 @@ class GodProcess
       end
     end
   end
-end
 
-class Hash
-  # remove all key-value pairs where the value is nil
-  def compact
-    reject{|key,val| val.nil? }
+  # ===========================================================================
+  #
+  # helpers
+  #
+
+  # command to start the daemon
+  def start_command
+    options[:start_command]
   end
-  # Replace the hash with its compacted self
-  def compact!
-    replace(compact)
+  # command to stop the daemon
+  # return nil to have god daemonize the process
+  def stop_command
+    options[:stop_command]
   end
+  # command to restart
+  # if stop_command is nil, it lets god daemonize the process
+  # otherwise, by default it runs stop_command, pauses for 1 second, then runs start_command
+  def restart_command
+    return unless stop_command
+    [stop_command, "sleep 1", start_command].join(" && ")
+  end
+
+  # Log file
+  def process_log_file
+    File.join(options[:process_log_dir], handle+".log")
+  end
+
+  # create any directories required by the process
+  def mkdirs!
+    require 'fileutils'
+    FileUtils.mkdir_p File.dirname(process_log_file)
+  end
+
 end
