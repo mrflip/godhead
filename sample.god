@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require 'god'
 require 'active_support'
-$: << File.dirname(__FILE__)+'/lib'
 require 'godhead'
 
 YUPFRONT_ROOT = "/slice/www/apps/yuploader_static/yupfront"
