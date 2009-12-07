@@ -1,0 +1,1 @@
+require 'godhead/extensions/hash'

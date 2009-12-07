@@ -1,3 +1,41 @@
+module Godhead
+  class TyrantRecipe < GodRecipe
+    DEFAULT_OPTIONS = {
+      :max_cpu_usage  => 50.percent,
+      :max_mem_usage  => 150.megabytes,
+      # runner-specific
+      :listen_on      => '0.0.0.0',
+      :port           => 1978,
+      :db_dirname     => '/tmp',
+      :runner_path     => '/usr/local/bin/ttserver',
+    }
+    def self.default_options()
+      super.deep_merge(Godhead::TyrantRecipe::DEFAULT_OPTIONS)
+    end
+
+    def dbname
+      basename = options[:db_name] || (handle+'.tct')
+      File.join(options[:db_dirname], basename)
+    end
+
+    # create any directories required by the process
+    def mkdirs!
+      FileUtils.mkdir_p File.dirname(dbname)
+      super
+    end
+
+    def start_command
+      [
+        options[:runner_path],
+        "-host #{options[:listen_on]}",
+        "-port #{options[:port]}",
+        "-log  #{process_log_file}",
+        dbname
+      ].flatten.compact.join(" ")
+    end
+  end
+end
+
 #
 # -host   name        : specify the host name or the address of the server.  By default, every network address is bound.
 # -port   num         : specify the port number.  By default, it is 1978.
@@ -24,42 +62,3 @@
 # -mask   expr        : specify the names of forbidden commands.
 # -unmask expr        : specify the names of allowed commands.
 #
-class TyrantGod < GodProcess
-  TyrantGod::DEFAULT_OPTIONS = {
-    :listen_on      => '0.0.0.0',
-    :port           => 11200,
-    :db_dirname     => '/tmp',
-    #
-    :max_cpu_usage  => 50.percent,
-    :max_mem_usage  => 150.megabytes,
-    :monitor_group  => 'tyrants',
-    :server_exe     => '/usr/local/bin/ttserver',
-  }
-  def self.default_options() super.deep_merge(TyrantGod::DEFAULT_OPTIONS)           ; end
-  def self.site_options()    super.deep_merge(global_site_options[:tyrant_god]||{}) ; end
-
-  def self.kind
-    :ttyrant
-  end
-
-  def dbname
-    basename = options[:db_name] || (handle+'.tct')
-    File.join(options[:db_dirname], basename)
-  end
-
-  # create any directories required by the process
-  def mkdirs!
-    super
-    FileUtils.mkdir_p File.dirname(dbname)
-  end
-
-  def start_command
-    [
-      options[:server_exe],
-      "-host #{options[:listen_on]}",
-      "-port #{options[:port]}",
-      "-log  #{process_log_file}",
-      dbname
-    ].flatten.compact.join(" ")
-  end
-end
