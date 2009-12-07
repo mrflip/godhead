@@ -31,7 +31,6 @@ module Godhead
     #
     def initialize _options={}
       self.options = self.class.default_options.deep_merge _options
-      p [self.class.to_s, options, pid_file]
     end
 
     def do_setup! options={}
