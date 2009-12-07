@@ -15,7 +15,6 @@ module Godhead
     def initialize _options={}
       super _options
       raise "need a runner path" unless options[:runner_path]
-      p options
     end
 
     # name the recipe after the worker script

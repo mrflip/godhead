@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{godhead}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Philip (flip) Kromer"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README-god.textile",
      "Rakefile",
      "VERSION",
+     "godhead.gemspec",
      "lib/godhead.rb",
      "lib/godhead/extensions.rb",
      "lib/godhead/extensions/hash.rb",
@@ -47,7 +48,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/mrflip/godhead}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.4}
+  s.rubygems_version = %q{1.3.5}
   s.summary = %q{God recipes that separate configuration for processes, site policy and notifications; comes with many examples}
   s.test_files = [
     "spec/godhead_spec.rb",
