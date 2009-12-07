@@ -22,9 +22,9 @@ Godhead::GenericWorkerRecipe.create group_options.merge({
 #
 group_options = { :monitor_group => :yupfront}
 
-Godhead::NginxRecipe.create group_options.merge({ })
+# Godhead::NginxRecipe.create group_options.merge({ })
 # replace with this one on OSX
-# Godhead::NginxRunnerRecipe.create group_options.merge({ })
+Godhead::NginxRunnerRecipe.create group_options.merge({ })
 
 (5000..5003).each do |port|
   Godhead::ThinRecipe.create(group_options.merge({

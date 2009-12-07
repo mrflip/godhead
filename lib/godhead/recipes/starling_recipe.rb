@@ -2,10 +2,11 @@ module Godhead
   #
   # Starling monitoring recipe
   #
+  # inspired by http://railscasts.com/episodes/130-monitoring-with-god
   class StarlingRecipe < GodRecipe
     DEFAULT_OPTIONS = {
-      :max_cpu_usage   => 20.percent,
-      :max_mem_usage   => 50.megabytes,
+      :max_cpu_usage   => 30.percent,
+      :max_mem_usage   => 20.megabytes,
       #
       :port            => 22122,
     }
