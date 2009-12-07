@@ -10,7 +10,7 @@ module Godhead
     }
     def self.default_options() super.deep_merge(DEFAULT_OPTIONS) ; end
 
-    def recipe_name
+    def self.recipe_name
       'nginx'
     end
 

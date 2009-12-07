@@ -63,9 +63,9 @@ module Godhead
       watcher.start            = start_command
       watcher.stop             = stop_command             if stop_command
       watcher.restart          = restart_command          if restart_command
+      watcher.pid_file         = pid_file                 if pid_file
       watcher.uid              = options[:uid]            if options[:uid]
       watcher.gid              = options[:gid]            if options[:gid]
-      watcher.pid_file         = options[:pid_file]       if options[:pid_file]
       watcher.interval         = options[:default_interval]
       watcher.start_grace      = options[:start_grace_time]
       watcher.restart_grace    = options[:restart_grace_time] || (options[:start_grace_time] + 2.seconds)
@@ -184,6 +184,11 @@ module Godhead
       options[:monitor_group].to_s || recipe_name.pluralize
     end
 
+    # by default, groups by process -- you may want to instead group by project
+    def pid_file
+      options[:pid_file]
+    end
+
     # command to start the daemon
     def start_command
       options[:start_command]
@@ -210,6 +215,7 @@ module Godhead
     def mkdirs!
       require 'fileutils'
       FileUtils.mkdir_p File.dirname(process_log_file)
+      FileUtils.mkdir_p File.dirname(options[:pid_file]) unless options[:pid_file].blank?
     end
 
   end

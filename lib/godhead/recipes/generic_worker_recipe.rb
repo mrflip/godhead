@@ -1,64 +1,40 @@
-# -*-ruby-*-
+module Godhead
+  #
+  # Starling monitoring recipe
+  #
+  class GenericWorkerRecipe < GodRecipe
+    DEFAULT_OPTIONS = {
+      :max_cpu_usage   => 20.percent,
+      :max_mem_usage   => 50.megabytes,
+      #
+      :pid_dir         => "/var/run/god",
+      :port            => 45000,
+      :runner_path     => nil,
+    }
+    def self.default_options() super.deep_merge(DEFAULT_OPTIONS) ; end
 
-YUPSHOT_DIR           = "/slice/www/apps/yuploader_static/yupshot"
-YUPSHOT_WORKER_DAEMON = File.join(YUPSHOT_DIR, "bin/yupshot_worker_daemon")
-YUPSHOT_PID_DIR       = File.join(YUPSHOT_DIR, "tmp/pids")
-
-God.watch do |w|
-  w.name        = "memcached"
-  w.group       = "yupshot"
-  w.group       = "yuploader"
-  pid_file      = File.join(YUPSHOT_PID_DIR, "memcached")
-
-  w.start       = "memcached -p 45000 -d -P #{pid_file}"
-  w.start_grace = 10.seconds
-
-  w.stop        = "killall memcached"
-
-  w.pid_file    = pid_file
-  w.behavior(:clean_pid_file)
-
-  w.lifecycle do |on|
-    on.condition(:process_exits) do |c|
-      c.notify = 'dhruv'
+    def initialize _options={}
+      super _options
+      raise "need a runner path" unless options[:runner_path]
+      p options
     end
-  end
-end
 
-God.watch do |w|
-  w.name  = "starling"
-  w.group = "yupshot"
-  w.group = "yuploader"
-  pid_file = File.join(YUPSHOT_PID_DIR, "starling")
-
-  w.start       = "starling -d -P #{pid_file}"
-  w.start_grace = 10.seconds
-
-  w.stop = "killall starling"
-
-  w.pid_file = pid_file
-  w.behavior(:clean_pid_file)
-
-  w.lifecycle do |on|
-    on.condition(:process_exits) do |c|
-      c.notify = 'dhruv'
+    # name the recipe after the worker script
+    def recipe_name
+      File.basename(options[:runner_path]).gsub(/\..*/, '')
     end
-  end
-end
 
-God.watch do |w|
-  w.name  = "worker_daemon"
-  w.group = "yupshot"
-  w.group = "yuploader"
-
-  w.start = "sudo -u www-data #{YUPSHOT_WORKER_DAEMON}"
-  w.start_grace = 10.seconds
-
-  w.stop = "killall yupshot_worker_daemon"
-
-  w.lifecycle do |on|
-    on.condition(:process_exits) do |c|
-      c.notify = 'dhruv'
+    def pid_file
+      File.join(options[:pid_dir], recipe_name+'.pid')
     end
+
+    def start_command
+      [
+        "sudo",
+        (options[:user] ? "-u #{options[:user]}" : nil),
+        options[:runner_path]
+      ].flatten.compact.join(" ")
+    end
+
   end
 end
