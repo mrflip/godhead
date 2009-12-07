@@ -14,7 +14,7 @@ module Godhead
     include Godhead::RunsAsService
 
     def start_command
-      "memcached -p #{options[:port]} -d -P #{options[:pid_file]}"
+      "memcached -u #{options[:user]} -p #{options[:port]} -d -P #{options[:pid_file]}"
     end
 
   end

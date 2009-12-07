@@ -8,6 +8,7 @@ module Godhead
       :restart_notify     => nil,
       :flapping_notify    => nil,
       :process_log_dir    => '/var/log/god',
+      :pid_dir            => "/var/run/god",
       :start_grace_time   => 10.seconds,
       :restart_grace_time => nil,         # will be start_grace_time+2 if left nil
       :default_interval   => 5.minutes,
@@ -30,6 +31,7 @@ module Godhead
     #
     def initialize _options={}
       self.options = self.class.default_options.deep_merge _options
+      p [self.class.to_s, options, pid_file]
     end
 
     def do_setup! options={}
@@ -184,9 +186,9 @@ module Godhead
       options[:monitor_group].to_s || recipe_name.pluralize
     end
 
-    # by default, groups by process -- you may want to instead group by project
+    # by default, uses :pid_dir/:recipe_name_:port.pid
     def pid_file
-      options[:pid_file]
+      options[:pid_file] || File.join(options[:pid_dir], "#{recipe_name}_#{options[:port]}.pid")
     end
 
     # command to start the daemon

@@ -7,8 +7,7 @@ module Godhead
       :max_cpu_usage   => 20.percent,
       :max_mem_usage   => 50.megabytes,
       #
-      :pid_dir         => "/var/run/god",
-      :port            => 45000,
+      :user            => nil,
       :runner_path     => nil,
     }
     def self.default_options() super.deep_merge(DEFAULT_OPTIONS) ; end
@@ -24,8 +23,9 @@ module Godhead
       File.basename(options[:runner_path]).gsub(/\..*/, '')
     end
 
+    # don't try to invent a pid_file -- by default god will find and make one
     def pid_file
-      File.join(options[:pid_dir], recipe_name+'.pid')
+      options[:pid_file]
     end
 
     def start_command

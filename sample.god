@@ -2,29 +2,32 @@
 require 'rubygems'
 require 'god'
 require 'active_support'
-
 $: << File.dirname(__FILE__)+'/lib'
 require 'godhead'
-# God.load "/slice/etc/god/*.god"
 
+YUPFRONT_ROOT = "/slice/www/apps/yuploader_static/yupfront"
 
-tyrant_recipe = Godhead::TyrantRecipe.new
+# ===========================================================================
+#
+# Yupshot god monitoring: the backend processing chain for yuploader
+#
+group_options = { :monitor_group => :yupshot, }
+Godhead::MemcachedRecipe.create     group_options.merge({ :user => 'www-data', :pid_file => '/tmp/mc.pid'})
+Godhead::StarlingRecipe.create      group_options
+Godhead::GenericWorkerRecipe.create group_options.merge({
+    :runner_path => "/slice/www/apps/yuploader_static/yupshot/bin/yupshot_worker_daemon" })
 
-group_options = { :monitor_group => :yuploader, }
-port  = 11220
-# tyrant_recipe.do_setup!     group_options.merge(:port => port + 0)
-
-# Godhead::NginxRecipe.create group_options.merge({ })
-# Godhead::NginxRunnerRecipe.create group_options.merge({ })
-# Godhead::GenericWorkerRecipe.create :runner_path => "/slice/www/apps/yuploader_static/yupshot/bin/yupshot_worker_daemon"
-# Godhead::StarlingRecipe.create
-# Godhead::MemcachedRecipe.create
-
-
-YUPFRONT_ROOT = "/slice/www/apps/yupfront"
-(5000..5002).each do |port|
-  Godhead::ThinRecipe.create({
+# ===========================================================================
+#
+# Yupfront god monitoring: the frontend processes for yuploader
+#
+group_options = { :monitor_group => :yupfront}
+(5000..5000).each do |port|
+  Godhead::ThinRecipe.create(group_options.merge({
       :port        => port,
-      :rackup      => File.join(YUPFRONT_ROOT, 'config.ru'),
-      :runner_conf => File.join(YUPFRONT_ROOT, 'production.yml') })
+      :rackup_file => File.join(YUPFRONT_ROOT, 'config.ru'),
+      :runner_conf => File.join(YUPFRONT_ROOT, 'production.yml') }))
 end
+Godhead::NginxRecipe.create group_options.merge({ })
+# replace with this one on OSX
+# Godhead::NginxRunnerRecipe.create group_options.merge({ })
