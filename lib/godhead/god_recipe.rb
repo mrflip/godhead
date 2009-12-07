@@ -12,8 +12,10 @@ module Godhead
       :start_grace_time   => 10.seconds,
       :restart_grace_time => nil,         # will be start_grace_time+2 if left nil
       :default_interval   => 5.minutes,
-      :start_interval     => 5.minutes,
+      :start_interval     => nil,         # uses default_interval if unset
+      :max_mem_usage      => nil,         # doesn't monitor mem usage if nil
       :mem_usage_interval => 10.minutes,
+      :max_cpu_usage      => 50.percent,  # doesn't monitor cpu usage if nil
       :cpu_usage_interval => 10.minutes,
     }
     #
@@ -79,7 +81,7 @@ module Godhead
     def setup_start watcher
       watcher.start_if do |start|
         start.condition(:process_running) do |c|
-          c.interval = options[:start_interval]
+          c.interval = options[:start_interval] || options[:default_interval]
           c.running  = false
           c.notify     = options[:start_notify] if options[:start_notify]
         end
@@ -91,16 +93,16 @@ module Godhead
       watcher.restart_if do |restart|
         restart.condition(:memory_usage) do |c|
           c.interval   = options[:mem_usage_interval] if options[:mem_usage_interval]
-          c.above      = options[:max_mem_usage] || 150.megabytes
+          c.above      = options[:max_mem_usage]
           c.times      = [3, 5] # 3 out of 5 intervals
           c.notify     = options[:restart_notify] if options[:restart_notify]
-        end
+        end if options[:max_mem_usage]
         restart.condition(:cpu_usage) do |c|
           c.interval   = options[:cpu_usage_interval] if options[:cpu_usage_interval]
-          c.above      = options[:max_cpu_usage] || 50.percent
+          c.above      = options[:max_cpu_usage]
           c.times      = 5
           c.notify     = options[:restart_notify] if options[:restart_notify]
-        end
+        end if options[:max_cpu_usage]
       end
     end
 
@@ -109,12 +111,12 @@ module Godhead
       watcher.lifecycle do |on|
         on.condition(:flapping) do |c|
           c.to_state     = [:start, :restart]
-          c.times        = 10
+          c.times        = 5
           c.within       = 15.minute
           c.transition   = :unmonitored
-          c.retry_in     = 60.minutes
+          c.retry_in     = 30.minutes
           c.retry_times  = 5
-          c.retry_within = 12.hours
+          c.retry_within = 4.hours
           c.notify       = options[:flapping_notify] if options[:flapping_notify]
         end
       end
