@@ -4,11 +4,27 @@ module Godhead
   #
   class GenericNginxRecipe < GodRecipe
     DEFAULT_OPTIONS = {
-      :max_cpu_usage   => 20.percent,
-      :max_mem_usage   => 500.megabytes,
+      :max_cpu_usage   => nil,
+      :max_mem_usage   => nil,
       :pid_file        => "/var/run/nginx/nginx.pid",
+      :port            => 80,
     }
     def self.default_options() super.deep_merge(DEFAULT_OPTIONS) ; end
+
+    # restart if can't contact server
+    def setup_restart watcher
+      super watcher
+      watcher.restart_if do |restart|
+        restart.condition(:http_response_code) do |c|
+          c.host        = 'localhost'
+          c.port        = options[:port]
+          c.path        = '/'
+          c.timeout     = 3.seconds
+          c.times       = [4, 5] # 4 out of 5 times failure
+          c.code_is_not = 200
+        end
+      end
+    end
 
     def self.recipe_name
       'nginx'
@@ -67,3 +83,4 @@ end
 #   -p prefix     : set prefix path (default: /usr/local/nginx/)
 #   -c filename   : set configuration file (default: /slice/etc/nginx/nginx.conf)
 #   -g directives : set global directives out of configuration file
+
