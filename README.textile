@@ -1,0 +1,29 @@
+h1. Godhead: Recipes for Monitoring with God
+
+Godhead lets you configure God monitoring tasks to separate configuration of _the program being monitored_ from configuration of _the specific project it's used in_.
+
+It also contains a collection of starting recipes gathered from around the web:
+
+* Nginx
+* Mongrel
+* Thin
+* Unicorn
+* Beanstalkd
+* Starling
+* Memcached
+* Tokyo Tyrant
+* Generic worker daemons
+
+h2. Our use case for godhead
+
+At infochimps, we have a lot of boxen set up as "scrapers":http://github.com/mrflip/monkeyshines and as "feed endpoints.":http://github.com/mrflip/flood_monkey These typically talk to a lightweight database of some sort, pull or push to a queue, and are controlled through a simple sinatra admin panel.
+
+With Godhead we describe the platonic form of, say, a "god config to monitor tokyo tyrant".  Then any project's god files specify only those few ways (port numbers, memory limits, etc) that it differs from any other project's Tokyo Tyrant tasks. Configuration is still done in Ruby, through any combination of config params and subclassing.
+
+h2. Links
+
+* "God Monitoring homepage":http://god.rubyforge.org/
+* "Railscast with God monitoring Workling and Starling":http://railscasts.com/episodes/130-monitoring-with-god
+* "beanstalkd"
+** "article by topfunky":http://nubyonrails.com/articles/about-this-blog-beanstalk-messaging-queue
+** "god recipe":http://pastie.textmate.org/private/ovgxu2ihoicli2ktrwtbew 
