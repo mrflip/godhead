@@ -189,6 +189,7 @@ module Godhead
 
     # by default, uses :pid_dir/:recipe_name_:port.pid
     def pid_file
+      return nil if (options[:pid_file] == false)
       options[:pid_file] || File.join(options[:pid_dir], "#{recipe_name}_#{options[:port]}.pid")
     end
 

@@ -23,8 +23,9 @@ module Godhead
     end
 
     # don't try to invent a pid_file -- by default god will find and make one
-    def pid_file
-      options[:pid_file]
+    # and will handle task killing/restarting/etc.
+    def pid_file()
+      nil
     end
 
     def start_command

@@ -7,7 +7,7 @@ module Godhead
     DEFAULT_OPTIONS = {
       :max_cpu_usage    => 10.percent,
       :max_mem_usage    => 50.megabytes,
-      :uid              => 'www-data',
+      :uid              => nil,               # probably want to set this
       #
       :root_dir         => nil,               # required to set this
       :runner_path      => 'unicorn',

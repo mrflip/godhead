@@ -6,7 +6,7 @@ module Godhead
       :max_job_size    => '65535',
       :max_cpu_usage   => 20.percent,
       :max_mem_usage   => 500.megabytes,
-      :runner_path => '/usr/local/bin/beanstalkd',
+      :runner_path     => '/usr/local/bin/beanstalkd',
     }
     def self.default_options() super.deep_merge(Godhead::BeanstalkdRecipe::DEFAULT_OPTIONS) ; end
 
@@ -18,6 +18,12 @@ module Godhead
         (options[:user] ? "-u #{options[:user]}" : nil),
         "-z #{options[:max_job_size]}",
       ].flatten.compact.join(" ")
+    end
+
+    # don't try to invent a pid_file -- by default god will find and make one
+    # and will handle task killing/restarting/etc.
+    def pid_file()
+      nil
     end
   end
 end

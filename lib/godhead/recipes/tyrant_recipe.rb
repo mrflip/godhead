@@ -38,6 +38,12 @@ module Godhead
         dbname
       ].flatten.compact.join(" ")
     end
+
+    # don't try to invent a pid_file -- by default god will find and make one
+    # and will handle task killing/restarting/etc.
+    def pid_file()
+      nil
+    end
   end
 end
 
