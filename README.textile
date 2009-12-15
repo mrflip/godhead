@@ -45,3 +45,4 @@ h2. Links
 ** "god recipe":http://pastie.textmate.org/private/ovgxu2ihoicli2ktrwtbew 
 * "delayed_job":http://github.com/blog/229-dj-god
 * "init.d/god script":http://www.johnwulff.com/2008/04/30/deploy-typo-using-capistrano
+* backgroundRb: "this one":http://effectif.com/articles/monitoring-backgroundrb-with-god - or "this one":http://blog.jonathanrwallace.com/2008/08/monitoring-backgroundrb-workers-with-god/

@@ -1,4 +1,9 @@
 module Godhead
+  #
+  # Tokyo Tyrant
+  #
+  # Lets god do the process management by killing/restarting according to the
+  # pid file
   class TyrantRecipe < GodRecipe
     DEFAULT_OPTIONS = {
       :max_cpu_usage  => 50.percent,
