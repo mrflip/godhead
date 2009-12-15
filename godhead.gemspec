@@ -5,33 +5,39 @@
 
 Gem::Specification.new do |s|
   s.name = %q{godhead}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Philip (flip) Kromer"]
-  s.date = %q{2009-12-07}
+  s.date = %q{2009-12-15}
   s.description = %q{Configure God monitored processes according to their concerns the servers (path and so forth), site policy (number, ports, etc), and notification (email groups, mailserver, etc).}
   s.email = %q{flip@infochimps.org}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README-god.textile"
+     "README.textile"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE",
-     "README-god.textile",
+     "README.textile",
      "Rakefile",
      "VERSION",
+     "examples/etc/god.conf",
+     "examples/etc/god/sample_project.god",
+     "examples/etc/init.d/god",
      "godhead.gemspec",
      "lib/godhead.rb",
      "lib/godhead/extensions.rb",
      "lib/godhead/extensions/hash.rb",
+     "lib/godhead/extensions/string.rb",
+     "lib/godhead/god_email.rb",
      "lib/godhead/god_recipe.rb",
      "lib/godhead/mixins.rb",
      "lib/godhead/mixins/runs_as_service.rb",
      "lib/godhead/notification.rb",
      "lib/godhead/notification/gmail.rb",
+     "lib/godhead/notifications.rb",
      "lib/godhead/process_groups.rb",
      "lib/godhead/recipes.rb",
      "lib/godhead/recipes/beanstalkd_recipe.rb",
@@ -39,6 +45,7 @@ Gem::Specification.new do |s|
      "lib/godhead/recipes/generic_worker_recipe.rb",
      "lib/godhead/recipes/memcached_recipe.rb",
      "lib/godhead/recipes/mongrel_recipe.rb",
+     "lib/godhead/recipes/mysql_recipe.rb",
      "lib/godhead/recipes/nginx_recipe.rb",
      "lib/godhead/recipes/resque_recipe.rb",
      "lib/godhead/recipes/starling_recipe.rb",
@@ -46,7 +53,6 @@ Gem::Specification.new do |s|
      "lib/godhead/recipes/tyrant_recipe.rb",
      "lib/godhead/recipes/unicorn_recipe.rb",
      "lib/godhead/recipes/workling_recipe.rb",
-     "sample.god",
      "scripts/god_init.d",
      "spec/godhead_spec.rb",
      "spec/spec_helper.rb"
@@ -67,16 +73,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 0"])
-      s.add_development_dependency(%q<yard>, [">= 0"])
-      s.add_runtime_dependency(%q<extlib>, [">= 0"])
+      s.add_runtime_dependency(%q<god>, [">= 0"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<yard>, [">= 0"])
-      s.add_dependency(%q<extlib>, [">= 0"])
+      s.add_dependency(%q<god>, [">= 0"])
+      s.add_dependency(%q<activesupport>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<yard>, [">= 0"])
-    s.add_dependency(%q<extlib>, [">= 0"])
+    s.add_dependency(%q<god>, [">= 0"])
+    s.add_dependency(%q<activesupport>, [">= 0"])
   end
 end

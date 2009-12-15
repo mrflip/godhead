@@ -12,7 +12,7 @@ begin
     gem.authors = ["Philip (flip) Kromer"]
     gem.add_development_dependency "rspec"
     gem.add_dependency 'god'
-    gem.add_dependency 'active_support'
+    gem.add_dependency 'activesupport'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
