@@ -16,6 +16,10 @@ It also contains a collection of starting recipes gathered from around the web:
 
 There's skeleton files for delayed_job, workling
 
+h2. Dependencies
+
+Requires the gems for active_support and, of course, god. Optionally requires tlsmail (for Gmail or other secure email notification).
+
 h2. Our use case for godhead
 
 At infochimps, we have a lot of boxen set up as "scrapers":http://github.com/mrflip/monkeyshines and as "feed endpoints.":http://github.com/mrflip/flood_monkey These typically talk to a lightweight database of some sort, pull or push to a queue, and are controlled through a simple sinatra admin panel.
