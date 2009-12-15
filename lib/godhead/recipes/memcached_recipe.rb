@@ -1,6 +1,6 @@
 module Godhead
   #
-  # Nginx monitoring recipe
+  # Memcached monitoring recipe
   #
   class MemcachedRecipe < GodRecipe
     DEFAULT_OPTIONS = {

@@ -1,6 +1,6 @@
 module Godhead
   #
-  # Starling monitoring recipe
+  # Generic worker process monitoring recipe
   #
   class GenericWorkerRecipe < GodRecipe
     DEFAULT_OPTIONS = {

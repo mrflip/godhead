@@ -1,5 +1,5 @@
 module Godhead
-  class ThinRecipe < GodRecipe
+  class MongrelRecipe < GodRecipe
     DEFAULT_OPTIONS = {
       :default_interval => 30.seconds,
       :max_cpu_usage    => 50.percent,
@@ -15,11 +15,11 @@ module Godhead
     def tell_runner action
       [
         options[:runner_path],
+        action,
         "--config=#{options[:runner_conf]}",
         "--port=#{  options[:port]}",
+        "--pid=#{pid_file}",
         (action == 'stop' ? nil : '-d'),
-        (action == 'stop' ? nil : "--pid=#{pid_file}"),
-        action
       ].flatten.compact.join(" ")
     end
     def start_command()   tell_runner :start   end
