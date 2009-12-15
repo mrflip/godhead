@@ -1,12 +1,13 @@
 module Godhead
   class BeanstalkdRecipe < GodRecipe
     DEFAULT_OPTIONS = {
-      :listen_on       => '0.0.0.0',
-      :port            => 11300,
-      :max_job_size    => '65535',
-      :max_cpu_usage   => 20.percent,
-      :max_mem_usage   => 500.megabytes,
-      :runner_path     => '/usr/local/bin/beanstalkd',
+      :listen_on        => '0.0.0.0',
+      :port             => 11300,
+      :max_job_size     => '65535',
+      :default_interval => 1.minute,
+      :max_cpu_usage    => 20.percent,
+      :max_mem_usage    => 500.megabytes,
+      :runner_path      => '/usr/local/bin/beanstalkd',
     }
     def self.default_options() super.deep_merge(Godhead::BeanstalkdRecipe::DEFAULT_OPTIONS) ; end
 

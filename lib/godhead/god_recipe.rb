@@ -4,11 +4,11 @@ module Godhead
       :monitor_group      => nil,
       :uid                => nil,
       :gid                => nil,
-      :start_notify       => nil,
+      :crash_notify       => nil,
       :restart_notify     => nil,
       :flapping_notify    => nil,
       :process_log_dir    => '/var/log/god',
-      :pid_dir            => "/var/run/god",
+      :pid_dir            => '/var/log/god',
       :start_grace_time   => 10.seconds,
       :restart_grace_time => nil,         # will be start_grace_time+2 if left nil
       :default_interval   => 5.minutes,
@@ -83,7 +83,11 @@ module Godhead
         start.condition(:process_running) do |c|
           c.interval = options[:start_interval] || options[:default_interval]
           c.running  = false
-          c.notify   = options[:start_notify] if options[:start_notify]
+        end
+      end
+      watcher.transition(:up, :start) do |on|
+        on.condition(:process_exits) do |c|
+          c.notify   = options[:crash_notify] if options[:crash_notify]
         end
       end
     end
