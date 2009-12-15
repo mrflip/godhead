@@ -35,8 +35,6 @@ Gem::Specification.new do |s|
      "lib/godhead/god_recipe.rb",
      "lib/godhead/mixins.rb",
      "lib/godhead/mixins/runs_as_service.rb",
-     "lib/godhead/notification.rb",
-     "lib/godhead/notification/gmail.rb",
      "lib/godhead/notifications.rb",
      "lib/godhead/process_groups.rb",
      "lib/godhead/recipes.rb",
