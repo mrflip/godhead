@@ -53,7 +53,6 @@ Gem::Specification.new do |s|
      "lib/godhead/recipes/tyrant_recipe.rb",
      "lib/godhead/recipes/unicorn_recipe.rb",
      "lib/godhead/recipes/workling_recipe.rb",
-     "scripts/god_init.d",
      "spec/godhead_spec.rb",
      "spec/spec_helper.rb"
   ]
