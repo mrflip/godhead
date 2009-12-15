@@ -2,6 +2,11 @@ module Godhead
   #
   # Nginx monitoring recipe
   #
+  # This defines standard options for nginx, and leaves it to subclasses to
+  # define the start_command and conf path and so forth.
+  #
+  # The nginx monitor not only watches the PID but also checks for a correct
+  # http_response_code
   class GenericNginxRecipe < GodRecipe
     DEFAULT_OPTIONS = {
       :max_cpu_usage   => nil,
@@ -28,11 +33,6 @@ module Godhead
 
     def self.recipe_name
       'nginx'
-    end
-
-    def mkdirs!
-      FileUtils.mkdir_p File.dirname(options[:pid_file])
-      super
     end
   end
 

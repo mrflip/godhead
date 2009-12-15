@@ -83,7 +83,7 @@ module Godhead
         start.condition(:process_running) do |c|
           c.interval = options[:start_interval] || options[:default_interval]
           c.running  = false
-          c.notify     = options[:start_notify] if options[:start_notify]
+          c.notify   = options[:start_notify] if options[:start_notify]
         end
       end
     end
@@ -112,9 +112,9 @@ module Godhead
         on.condition(:flapping) do |c|
           c.to_state     = [:start, :restart]
           c.times        = 5
-          c.within       = 15.minute
+          c.within       = options[:flapping_window]   || 15.minute
           c.transition   = :unmonitored
-          c.retry_in     = 30.minutes
+          c.retry_in     = options[:flapping_retry_in] || 30.minutes
           c.retry_times  = 5
           c.retry_within = 4.hours
           c.notify       = options[:flapping_notify] if options[:flapping_notify]
