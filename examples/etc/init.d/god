@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # God init.d (startup) script 
@@ -11,7 +11,8 @@
 #
 # Also consider adding this line (kills god weekly) to your crontab (sudo crontab -e):
 #
-#    0 1 * * 0 god quit; sleep 1; killall god; sleep 1; killall -9 god; sleep 1; god -c /etc/god.conf
+#    # deicide is painless
+#    0 1 * * 0 god quit; sleep 1; killall god; sleep 1; killall -9 god; sleep 1; /etc/init.d/god start
 # 
 
 RETVAL=0
