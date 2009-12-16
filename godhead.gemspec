@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Philip (flip) Kromer"]
-  s.date = %q{2009-12-15}
+  s.date = %q{2009-12-16}
   s.description = %q{Configure God monitored processes according to their concerns the servers (path and so forth), site policy (number, ports, etc), and notification (email groups, mailserver, etc).}
   s.email = %q{flip@infochimps.org}
   s.extra_rdoc_files = [
@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
      "lib/godhead/recipes/resque_recipe.rb",
      "lib/godhead/recipes/starling_recipe.rb",
      "lib/godhead/recipes/thin_recipe.rb",
+     "lib/godhead/recipes/thinking_sphinx.rb",
      "lib/godhead/recipes/tyrant_recipe.rb",
      "lib/godhead/recipes/unicorn_recipe.rb",
      "lib/godhead/recipes/workling_recipe.rb",
