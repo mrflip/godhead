@@ -20,6 +20,8 @@ h2. Dependencies
 
 Requires the gems for active_support and, of course, god. Optionally requires tlsmail (for Gmail or other secure email notification).
 
+If you enjoy godhead you may also wish to find  "Jesus,":http://github.com/dmathieu/jesus the "web interface for god to speak with mankind". Allelujah.
+
 h2. Examples
 
 The @examples/@ directory holds:

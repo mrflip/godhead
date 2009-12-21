@@ -1,0 +1,10 @@
+--- # -*- YAML -*-
+#
+# Save this file in your god dir (probably /etc/god), *then* change the settings
+# below.  Make sure your version control system is set to ignore the file.
+#
+
+:email:
+  :username:            robot@mydomain.com
+  :password:            password1your_mom
+  :smtp_domain:         mydomain.com
