@@ -17,8 +17,8 @@
 
 RETVAL=0
 god_conf="/etc/god.conf"
-god_pid_file="/var/run/god.pid"
-god_log_file="/var/log/god.log"
+god_pid_file="/var/run/god/god.pid" ; mkdir -p `dirname $god_pid_file`
+god_log_file="/var/log/god/god.log" ; mkdir -p `dirname $god_log_file`
 case "$1" in
   start)
     god -c "$god_conf" -P "$god_pid_file" -l "$god_log_file"
