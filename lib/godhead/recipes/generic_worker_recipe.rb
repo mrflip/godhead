@@ -14,6 +14,7 @@ module Godhead
 
     def initialize _options={}
       super _options
+      p [options, handle, process_log_file]
       raise "need a runner path" unless options[:runner_path]
     end
 
@@ -28,12 +29,19 @@ module Godhead
       nil
     end
 
+    def setup_watcher watcher
+      super
+      watcher.log = process_log_file
+    end
+
     def start_command
-      [
+      cmd = [
         "sudo",
         (options[:user] ? "-u #{options[:user]}" : nil),
-        options[:runner_path]
+        options[:runner_path],
       ].flatten.compact.join(" ")
+      p ['worker command', cmd]
+      cmd
     end
 
   end

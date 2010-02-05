@@ -8,7 +8,7 @@ module Godhead
       :restart_notify     => nil,
       :flapping_notify    => nil,
       :process_log_dir    => '/var/log/god',
-      :pid_dir            => '/var/log/god',
+      :pid_dir            => '/var/run/god',
       :start_grace_time   => 10.seconds,
       :restart_grace_time => nil,         # will be start_grace_time+2 if left nil
       :default_interval   => 5.minutes,

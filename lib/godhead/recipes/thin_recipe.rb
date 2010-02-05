@@ -1,7 +1,7 @@
 module Godhead
   class ThinRecipe < GodRecipe
     DEFAULT_OPTIONS = {
-      :default_interval => 30.seconds,
+      :default_interval => 180.seconds,
       :port             => 3000,
       :thin_port_offset => 3000,
       :runner_path      => '/usr/bin/thin',        # path to thin. Override this in the site config file.
