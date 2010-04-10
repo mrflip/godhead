@@ -10,13 +10,15 @@ begin
     gem.email = "flip@infochimps.org"
     gem.homepage = "http://github.com/mrflip/godhead"
     gem.authors = ["Philip (flip) Kromer"]
+    gem.add_development_dependency "yard", ">= 0"
     gem.add_development_dependency "rspec"
     gem.add_dependency 'god'
     gem.add_dependency 'activesupport'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
 require 'spec/rake/spectask'
@@ -33,3 +35,12 @@ end
 
 task :spec => :check_dependencies
 task :default => :spec
+
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new
+rescue LoadError
+  task :yardoc do
+    abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
+  end
+end
