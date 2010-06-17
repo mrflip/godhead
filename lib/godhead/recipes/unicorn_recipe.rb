@@ -36,7 +36,8 @@ module Godhead
 
     # # USR2 causes the master to re-create itself and spawn a new worker pool
     def restart_command
-      "kill -USR2 `cat #{pid_file}`"
+      old_pid = pid_file
+      "kill -USR2 #{old_pid} ; sleep 4 ; kill -QUIT #{old_pid}"
     end
   end
 end
