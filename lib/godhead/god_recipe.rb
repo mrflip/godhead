@@ -4,6 +4,7 @@ module Godhead
       :monitor_group      => nil,
       :uid                => nil,
       :gid                => nil,
+      :env                => nil,
       :crash_notify       => nil,
       :restart_notify     => nil,
       :flapping_notify    => nil,
@@ -69,6 +70,7 @@ module Godhead
       watcher.pid_file         = pid_file                 if pid_file
       watcher.uid              = options[:uid]            if options[:uid]
       watcher.gid              = options[:gid]            if options[:gid]
+      watcher.env              = options[:env]            if options[:env]
       watcher.interval         = options[:default_interval]
       watcher.start_grace      = options[:start_grace_time]
       watcher.restart_grace    = options[:restart_grace_time] || (options[:start_grace_time] + 2.seconds)
