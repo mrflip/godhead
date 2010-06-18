@@ -56,7 +56,7 @@ Gem::Specification.new do |s|
      "spec/godhead_spec.rb",
      "spec/spec_helper.rb"
   ]
-  s.homepage = %q{http://github.com/mrflip/godhead}
+  s.homepage = %q{http://github.com/infochimps/godhead}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
