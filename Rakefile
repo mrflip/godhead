@@ -7,9 +7,9 @@ begin
     gem.name = "godhead"
     gem.summary = %Q{God recipes that separate configuration for processes, site policy and notifications; comes with many examples}
     gem.description = %Q{Configure God monitored processes according to their concerns the servers (path and so forth), site policy (number, ports, etc), and notification (email groups, mailserver, etc).}
-    gem.email = "flip@infochimps.org"
-    gem.homepage = "http://github.com/mrflip/godhead"
-    gem.authors = ["Philip (flip) Kromer"]
+    gem.email = "coders@infochimps.org"
+    gem.homepage = "http://github.com/infochimps/godhead"
+    gem.authors = ["Philip (flip) Kromer, Dhruv Bansal, Carl Knutson"]
     gem.add_development_dependency "rspec"
     gem.add_dependency 'god'
     gem.add_dependency 'activesupport'
