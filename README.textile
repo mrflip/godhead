@@ -34,7 +34,7 @@ The @examples/@ directory holds:
 
 h2. Our use case for godhead
 
-At infochimps, we have a lot of boxen set up as "scrapers":http://github.com/mrflip/monkeyshines and as "feed endpoints.":http://github.com/mrflip/flood_monkey These typically talk to a lightweight database of some sort, pull or push to a queue, and are controlled through a simple sinatra admin panel.
+At infochimps, we have a lot of boxen set up as "scrapers":http://github.com/infochimps/monkeyshines and as "feed endpoints.":http://github.com/mrflip/flood_monkey These typically talk to a lightweight database of some sort, pull or push to a queue, and are controlled through a simple sinatra admin panel.
 
 With Godhead we describe the platonic form of, say, a "god config to monitor Tokyo Tyrant".  The god files for a project using Tokyo Tyrant specifies only those few ways (port numbers, memory limits, etc) that its tasks differ from any other project's Tokyo Tyrant tasks. Configuration is still done in Ruby, through any combination of config params and subclassing.
 

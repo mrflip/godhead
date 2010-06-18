@@ -42,3 +42,4 @@ a.out
 /public/stylesheets/compiled/*
 /vendor/src/**/*
 *.gem
+*.gemspec
