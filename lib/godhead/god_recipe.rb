@@ -71,6 +71,7 @@ module Godhead
       watcher.uid              = options[:uid]            if options[:uid]
       watcher.gid              = options[:gid]            if options[:gid]
       watcher.env              = options[:env]            if options[:env]
+      watcher.log              = process_log_file
       watcher.interval         = options[:default_interval]
       watcher.start_grace      = options[:start_grace_time]
       watcher.restart_grace    = options[:restart_grace_time] || (options[:start_grace_time] + 2.seconds)
