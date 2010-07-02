@@ -72,6 +72,7 @@ module Godhead
       watcher.gid              = options[:gid]            if options[:gid]
       watcher.env              = options[:env]            if options[:env]
       watcher.log              = process_log_file
+      watcher.err_log          = process_err_log_file
       watcher.interval         = options[:default_interval]
       watcher.start_grace      = options[:start_grace_time]
       watcher.restart_grace    = options[:restart_grace_time] || (options[:start_grace_time] + 2.seconds)
@@ -220,6 +221,11 @@ module Godhead
     # Default log filename
     def process_log_file
       File.join(options[:process_log_dir], handle+".log")
+    end
+
+    # Default error log filename.
+    def process_err_log_file
+      process_log_file
     end
 
     # create any directories required by the process
