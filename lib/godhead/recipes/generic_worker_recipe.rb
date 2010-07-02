@@ -7,7 +7,6 @@ module Godhead
       :max_cpu_usage   => 20.percent,
       :max_mem_usage   => 50.megabytes,
       #
-      :user            => nil,
       :runner_path     => nil
     }
     def self.default_options() super.deep_merge(DEFAULT_OPTIONS) ; end
@@ -35,13 +34,7 @@ module Godhead
     end
 
     def start_command
-      cmd = [
-             "sudo",
-             (options[:user] ? "-u #{options[:user]}" : nil),
-             options[:runner_path],
-            ].flatten.compact.join(" ")
-      p ['worker command', cmd]
-      cmd
+      options[:runner_path]
     end
     
   end
